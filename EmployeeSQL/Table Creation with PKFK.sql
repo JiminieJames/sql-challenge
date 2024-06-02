@@ -4,12 +4,12 @@
 -- This import was altered because must have mislabled items which did not allow the program to run correctly. They were fixed post import. 
 
 CREATE TABLE departments (
-    "dept_no" CHAR(4) PRIMARY KEY,
+    "dept_no" CHAR(4) PRIMARY KEY NOT NULL,
     "dept_name" varchar(25) NOT NULL
 );
 
 CREATE TABLE employees (
-    emp_no INT PRIMARY KEY,
+    emp_no INT PRIMARY KEY NOT NULL,
 	emp_title_id CHAR(5) NOT NULL, 
     birth_date DATE NOT NULL,
     first_name VARCHAR(25) NOT NULL,
@@ -22,21 +22,25 @@ ALTER TABLE employees
 ADD CONSTRAINT fk_titles
 FOREIGN KEY (emp_title_id) REFERENCES titles(title_id);
 
+DROP TABLE dept_emp
 
 CREATE TABLE dept_emp (
     emp_no INT NOT NULL,
     dept_no CHAR(4) NOT NULL,
     FOREIGN KEY (emp_no) REFERENCES employees(emp_no),
-    FOREIGN KEY (dept_no) REFERENCES departments(dept_no)
+    FOREIGN KEY (dept_no) REFERENCES departments(dept_no),
+	PRIMARY KEY (emp_no, dept_no) --Composite Key Add 
 );
 
 -- SELECT * FROM dept_emp
+DROP TABLE dept_manager
 
 CREATE TABLE dept_manager (
     "dept_no" varchar(25)   NOT NULL,
     "emp_no" int   NOT NULL,
     FOREIGN KEY (emp_no) REFERENCES employees(emp_no),
-    FOREIGN KEY (dept_no) REFERENCES departments(dept_no)
+    FOREIGN KEY (dept_no) REFERENCES departments(dept_no),
+	PRIMARY KEY (dept_no, emp_no) --Composite Key Add 
 );
 
 CREATE TABLE salaries (
@@ -53,4 +57,4 @@ CREATE TABLE titles (
 ALTER TABLE titles
 ADD CONSTRAINT pk_title_id PRIMARY KEY (title_id);
 
-SELECT * FROM titles
+SELECT * FROM dept_emp
